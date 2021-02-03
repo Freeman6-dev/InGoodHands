@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    <header class="header--form-page">
+      <nav class="container container--70">
+        {% include 'header_logged_in_menu.html' %}
+
+        {% include 'header_menu_buttons_1.html' %}
+      </nav>
+
+      <div class="slogan container container--90">
+          <h2>
+            Dziękujemy za przesłanie formularza Na maila prześlemy wszelkie
+            informacje o odbiorze.
+          </h2>
+      </div>
+    </header>
+
+    {% include 'footer.html' %}
+
+    <script src="js/app.js"></script>
+
+{% endblock %}
