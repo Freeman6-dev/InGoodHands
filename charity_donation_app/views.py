@@ -1,10 +1,11 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import render, redirect
 
 # Create your views here.
 from django.views import View
 
-from charity_donation_app.models import Donation, Institution
+from charity_donation_app.models import Donation, Institution, Category
 from user_app.models import MyUser
 
 
@@ -43,9 +44,7 @@ class LoginView(View):
             'email': request.POST['email'],
             'password': request.POST['password']
         }
-        print(form['email'])
-        print(form['password'])
-        user = authenticate(request, email=form['email'], password=form['password'])
+        user = authenticate(request, username=form['email'], email=form['email'], password=form['password'])
         if user is not None:
             login(request, user)
             return redirect('index')
@@ -68,7 +67,7 @@ class RegisterView(View):
         if form['password'] == form['password2']:
             try:
                 user = MyUser.objects.create(first_name=form['first_name'], last_name=form['last_name'],
-                                             email=form['email'])
+                                             email=form['email'], username=form['email'])
                 user.save()
                 user.set_password(form['password'])
                 user.save()
@@ -80,10 +79,19 @@ class RegisterView(View):
         return render(request, 'register.html', {'message': message})
 
 
-class AddDonationView(View):
+class LogoutView(View):
 
     def get(self, request):
-        return render(request, 'form.html')
+        logout(request)
+        return redirect('index')
+
+
+class AddDonationView(LoginRequiredMixin, View):
+
+    def get(self, request):
+        categories = Category.objects.all()
+        context = {'categories': categories}
+        return render(request, 'form.html', context)
 
 
 class RemindPasswordView(View):
