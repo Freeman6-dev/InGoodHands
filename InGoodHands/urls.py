@@ -26,4 +26,10 @@ urlpatterns = [
     path('accounts/logout/', views.LogoutView.as_view(), name='logout'),
     path('add_donation/', views.AddDonationView.as_view(), name='add_donation'),
     path('remind_password/', views.RemindPasswordView.as_view(), name='remind_password'),
+    path('user_profile/', views.UserProfileView.as_view(), name='user_profile'),
+    path('user_profile/taken/<int:pk>', views.DonationTakenView.as_view(), name='taken'),
+    path('settings/', views.UserSettingsView.as_view(), name='user_settings'),
+    path('settings/change_password/', views.ChangeUserPasswordView.as_view(), name='change_password'),
+
+
 ]

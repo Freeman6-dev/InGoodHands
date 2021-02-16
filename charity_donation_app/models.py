@@ -1,7 +1,8 @@
 from django.db import models
 
-
 # Create your models here.
+from django.urls import reverse
+
 from InGoodHands import settings
 
 
@@ -10,7 +11,6 @@ class Category(models.Model):
 
     def __str__(self):
         return f"{self.name}"
-
 
 
 class Institution(models.Model):
@@ -33,6 +33,9 @@ class Institution(models.Model):
             list.append(element['name'])
         return ', '.join([str(elem) for elem in list])
 
+    def __str__(self):
+        return f"{self.name}, {self.description}"
+
 
 class Donation(models.Model):
     quantity = models.IntegerField()
@@ -46,3 +49,13 @@ class Donation(models.Model):
     pick_up_time = models.TimeField(null=True, blank=True)
     pick_up_comment = models.TextField(blank=True)
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+    is_taken = models.BooleanField(default=False)
+
+    def categories_list(self):
+        list = []
+        for element in self.categories.values():
+            list.append(element['name'])
+        return ', '.join([str(elem) for elem in list])
+
+    def get_detail_url(self):
+        return reverse("taken", args=(self.pk,))

@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+    <header class="header--form-page">
+      <nav class="container container--70">
+          {% if request.user.is_authenticated %}
+              {% include 'header_logged_in_menu.html' %}
+              {% include 'header_menu_buttons_2.html' %}
+              {% else %}
+              {% include 'header_logged_out_menu.html' %}
+              {% include 'header_menu_buttons_1.html' %}
+            {% endif %}
+      </nav>
+
+        <section style="text-align: center">
+        <h2>Twoje dane:</h2>
+            <h1>Imię: {{ request.user.first_name }}</h1>
+            <h1>Nazwisko: {{ request.user.last_name }}</h1>
+            <h1>Email: {{ request.user.email }}</h1>
+        </section>
+
+
+
+    </header>
+    <section style="text-align: center">
+        <h2>Twoje dary</h2>
+            {% for donation in user_donations %}
+                <ul
+                {% if donation.is_taken %}
+                    style="color: gray"
+                {% endif %}>
+                    <h3>Liczba przekazanych worków: {{ donation.quantity }}</h3>
+                    <h3>Organizacja: {{ donation.institution }}</h3>
+                    <h3>Kategorie: {{ donation.categories_list }}</h3>
+                    <h3>Odbiór: {{ donation.pick_up_date }}</h3>
+                    {% if donation.is_taken %}
+                        <h3><a href="{{ donation.get_detail_url }}">Zabrany</a></h3>
+                    {% else %}
+                        <h3><a href="{{ donation.get_detail_url }}">Niezabrany</a></h3>
+                    {% endif %}
+                <br>
+                </ul>
+            {% endfor %}
+        </section>
+{% endblock %}

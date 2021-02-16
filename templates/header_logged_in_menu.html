@@ -3,8 +3,8 @@
     <li class="logged-user">
         Witaj {{ request.user.first_name }}
         <ul class="dropdown">
-            <li><a href="#">Profil</a></li>
-            <li><a href="#">Ustawienia</a></li>
+            <li><a href="{% url 'user_profile' %}">Profil</a></li>
+            <li><a href="{% url 'user_settings' %}">Ustawienia</a></li>
             <li><a href="{% url 'index' %}admin">Panel administracyjny</a></li>
             <li><a href="{% url 'logout' %}">Wyloguj</a></li>
         </ul>
